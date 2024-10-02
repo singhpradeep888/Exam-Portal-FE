@@ -57,8 +57,7 @@ function Landing() {
         <section className="mb-16">
           <div className="relative rounded-lg overflow-hidden shadow-xl">
             <img
-              src="https://plus.unsplash.com/premium_photo-1680807869086-e08309acfb24?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D "
-              alt="Secure exam platform interface"
+              src="https://images.pexels.com/photos/4778621/pexels-photo-4778621.jpeg?auto=compress&cs=tinysrgb&w=600"
               className="w-full h-[400px] object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600/50 to-transparent flex items-center">
