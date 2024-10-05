@@ -1,37 +1,43 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  async function handleLogin(e) {
     e.preventDefault();
 
-    if (!email || !password) {
-      setError("Please enter both email and password.");
-      return;
-    }
-
     try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        'http://localhost:3000/auth/login',
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/JSON',
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
         },
-        body: JSON.stringify({ email, password }),
-      });
+        []
+      );
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error("Login failed. Please check your credentials.");
+        setError(data.message);
+        return;
       }
-
-      const data = await response.json();
-      console.log("Login successful:", data);
+      navigate('/');
     } catch (error) {
-      setError(error.message);
+      setError('An error occurred');
+      console.error(`Login error: ${error.message}`)
     }
-  };
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-gray-600 to-white-100 flex">
@@ -41,36 +47,38 @@ const Login = () => {
           alt="Login"
           className="object-cover w-full h-full rounded-l-lg shadow-lg transition duration-500 transform hover:scale-105"
         />
-       
+
         <div className="absolute inset-0 bg-black opacity-30 rounded-l-lg"></div>
       </div>
       <div className="w-full lg:w-1/2 flex items-center justify-center">
         <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md transition-transform transform">
           <h2 className="text-2xl font-semibold text-gray-800 text-center">Login</h2>
 
-          {error && <p className="text-red-500 text-center">{error}</p>}
+          {error && <p className="text-red-500 p-2 px-4 mt-4 bg-red-50 rounded-md">{error}</p>}
 
           <form onSubmit={handleLogin} className="mt-6">
             <div className="mb-4">
-              <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">Email</label>
+              <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">
+                Email
+              </label>
               <input
                 type="email"
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 hover:border-blue-400"
               />
             </div>
 
             <div className="mb-4">
-              <label htmlFor="password" className="block text-gray-700 font-semibold mb-2">Password</label>
+              <label htmlFor="password" className="block text-gray-700 font-semibold mb-2">
+                Password
+              </label>
               <input
                 type="password"
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 hover:border-blue-400"
               />
             </div>
@@ -84,7 +92,10 @@ const Login = () => {
           </form>
 
           <p className="mt-4 text-gray-600 text-center">
-            Don't have an account? <a href="/signup" className="text-blue-700 hover:underline">Sign Up</a>
+            Don't have an account?{' '}
+            <a href="/signup" className="text-blue-700 hover:underline">
+              Sign Up
+            </a>
           </p>
         </div>
       </div>
