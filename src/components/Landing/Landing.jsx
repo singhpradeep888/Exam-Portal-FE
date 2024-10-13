@@ -15,20 +15,21 @@ function Landing() {
       <header className="bg-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center">
-            <Shield className="h-8 w-8 text-blue-600 mr-2" />
-            <span className="text-2xl font-bold text-blue-600">ExamStep</span>
+            <Shield className="h-8 w-8 text-blue-800 mr-2" />
+            <span className="text-2xl font-bold text-blue-700">ExamNext</span>
           </div>
           <nav className="hidden md:flex space-x-4">
             <Button variant="ghost">Features</Button>
             <Button variant="ghost">About Us</Button>
             <Button variant="ghost">Contact Us</Button>
           </nav>
+
           <div className="flex items-center space-x-4">
             <Link to="/Login">
-              <Button variant="primary" className="bg-blue-600 text-white hover:bg-blue-700 transition duration-300 shadow-lg transform ">Login</Button>
+              <Button className= "bg-blue-900 text-black transition duration-300 transform">Login</Button>
             </Link>
             <Link to="/signup">
-              <Button variant="primary" className="bg-blue-600 text-white hover:bg-blue-700 transition duration-300 shadow-lg transform">Signup</Button>
+              <Button className="bg-blue-900 text-black transition duration-300 transform">Signup</Button>
             </Link>
           </div>
           <Button variant="ghost" size="icon" className="md:hidden">
@@ -44,12 +45,12 @@ function Landing() {
           <h1 className="text-5xl font-extrabold tracking-tight text-blue-900 sm:text-6xl md:text-7xl animate-fadeIn">
             Welcome to the Secure Exam Portal
           </h1>
-          <p className="mt-3 max-w-lg mx-auto text-gray-600 text-lg md:text-xl animate-fadeIn">
+          <p className="mt-3  max-w-lg mx-auto text-gray-600 text-lg md:text-xl animate-fadeIn">
             Conduct exams with confidence using our secure platform. Protect the integrity of your assessments.
           </p>
           <div className="mt-5 flex justify-center space-x-4">
-            <Button variant="primary" size="lg" className="transition-transform hover:scale-105 bg-blue-600 text-white">Get Started</Button>
-            <Button variant="outline" size="lg" className="transition-transform hover:scale-105">Learn More</Button>
+            <Button variant="primary" size="lg" className="transition-transform bg-blue-900 text-white">Get Started</Button>
+            <Button variant="outline" size="lg" className="transition-transform ">Learn More</Button>
           </div>
         </section>
 
@@ -57,14 +58,14 @@ function Landing() {
         <section className="mb-16">
           <div className="relative rounded-lg overflow-hidden shadow-xl">
             <img
-              src="https://images.pexels.com/photos/4145153/pexels-photo-4145153.jpeg?auto=compress&cs=tinysrgb&w=600"
+              src="bgimage.jpg"
               className="w-full h-[400px] object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-blue-800/40 to-transparent flex items-center">
               <div className="p-8">
                 <h2 className="text-4xl font-bold text-white mb-4">Advanced Security Features</h2>
                 <p className="text-white text-lg mb-6">Our platform ensures exam integrity with cutting-edge technology.</p>
-                <Button size="lg" className="transition-transform hover:scale-105 bg-blue-700 text-white">Explore Features</Button>
+                <Button size="lg" className="transition-transform hover:scale-105 bg-blue-900 text-white">Explore Features</Button>
               </div>
             </div>
           </div>
@@ -80,7 +81,7 @@ function Landing() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <img src="https://plus.unsplash.com/premium_photo-1676618539992-21c7d3b6df0f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8c2VjdXJlfGVufDB8fDB8fHww" alt="secure" />
+              <img className="h-50" src="img1.jpg" alt="secure" />
               <CardDescription className="mt-4">Our secure portal prevents unauthorized access during exams.</CardDescription>
             </CardContent>
           </Card>
@@ -92,7 +93,7 @@ function Landing() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <img className="h-48" src="https://media.istockphoto.com/id/1168365129/photo/authentication-by-facial-recognition-concept-biometric-security-system.webp?a=1&b=1&s=612x612&w=0&k=20&c=zrmmhBkryRrqMZI6Dc440BLlsCh-ejqq9Qr0WvvqR0c=" alt="" />
+              <img className="h-50" src="img2.jpg" alt="powerd by ai" />
               <CardDescription className="mt-4">AI algorithms monitor student behavior to detect cheating attempts.</CardDescription>
             </CardContent>
           </Card>
@@ -104,7 +105,7 @@ function Landing() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <img src="https://media.istockphoto.com/id/2124267004/photo/check-mark-symbol-3d-glossy-icon-on-abstract-futuristic-background-success-solution.webp?a=1&b=1&s=612x612&w=0&k=20&c=tYX_01sp29f5e5FHlhjq6NqrqlJnodLjuYJMqXDImF0=" alt="" />
+              <img className="h-50" src="img3.jpg" alt="authentication" />
               <CardDescription className="mt-4">Ensure the authenticity of results with our robust verification system.</CardDescription>
             </CardContent>
           </Card>
