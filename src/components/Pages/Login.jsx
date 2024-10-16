@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import useToken from '../../../App/useToken';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate();
+  const navigateTo = useNavigate();
+  const { token, setToken } = useToken();
+
+  useEffect(() => {
+    if (token) {
+      navigateTo('/dashboard');
+    }
+  });
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -29,7 +36,8 @@ const Login = () => {
         setError(data.message);
         return;
       }
-      navigate('/');
+      setToken(true);
+      navigateTo('/dashboard');
     } catch (error) {
       setError('An error occurred');
       console.error(`Login error: ${error.message}`);
@@ -38,11 +46,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen w-full relative flex items-center justify-center">
-      <img
-        src="loginsignup.jpg"
-        alt="Login"
-        className="absolute inset-0 object-cover w-full h-full"
-      />
+      <img src="loginsignup.jpg" alt="Login" className="absolute inset-0 object-cover w-full h-full" />
       <div className="absolute inset-0 bg-black opacity-50"></div>
 
       <div className="relative z-10 w-full max-w-md mx-auto p-8 bg-white bg-opacity-80 backdrop-blur-md rounded-lg shadow-xl">

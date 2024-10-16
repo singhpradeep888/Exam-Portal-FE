@@ -1,8 +1,17 @@
 // App.js
-import React from 'react';
-import Sidebar from './sidebar';
+import React, { useEffect } from 'react';
+import Sidebar from '../Sidebar/sidebar';
+import { useNavigate } from 'react-router-dom';
+import useToken from '../../../App/useToken';
 
 function Dashboard() {
+  const navigateTo = useNavigate();
+  const { token } = useToken();
+
+  useEffect(() => {
+    if (!token) navigateTo('/Login');
+  }, [token, navigateTo]);
+
   return (
     <div style={{ display: 'flex' }}>
       <Sidebar />
