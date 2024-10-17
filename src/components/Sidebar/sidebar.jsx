@@ -1,6 +1,6 @@
 // Sidebar.js
 import React from 'react';
-import './sidebar.css'; // Add CSS for styling
+import './sidebar.css';
 import useToken from '../../../App/useToken';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,7 +12,10 @@ const Sidebar = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('', {});
+      const response = await fetch('http://localhost:3000/auth/logout', {
+        method: 'GET',
+        credentials: 'include'
+      });  
       if (!response.ok) {
         console.error('Failed to log out user');
         return;
