@@ -1,11 +1,11 @@
 // Sidebar.js
 import React from 'react';
 import './sidebar.css';
-import useToken from '../../../App/useToken';
+import useAuth from '../../../App/useAuth';
 import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
-  const { setToken } = useToken();
+  const { setAuthenticated: setToken } = useAuth();
   const navigateTo = useNavigate();
 
   async function handleLogout(e) {

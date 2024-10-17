@@ -5,6 +5,7 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -17,13 +18,14 @@ const Signup = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:3000/auth/signup', {
+      const response = await fetch('http://localhost:3000/auth/register', {
         method: 'POST',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/JSON',
         },
         body: JSON.stringify({
+          username: username,
           email: email,
           password: password,
         }),
@@ -56,6 +58,18 @@ const Signup = () => {
         {error && <p className="text-red-500 p-2 px-4 mb-4 bg-red-100 rounded-md">{error}</p>}
 
         <form onSubmit={handleSignup} className="mt-6">
+        <div className="mb-4">
+            <label htmlFor="username" className="block text-gray-700 font-semibold mb-2">
+              Full Name
+            </label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+            />
+          </div>
           <div className="mb-4">
             <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">
               Email

@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useToken from '../../../App/useToken';
+import useAuth from '../../../App/useAuth';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigateTo = useNavigate();
-  const { token, setToken } = useToken();
+  const { isAuthenticated, setAuthenticated } = useAuth();
 
   useEffect(() => {
-    if (token) {
+    if (isAuthenticated) {
       navigateTo('/dashboard');
     }
   });
@@ -36,7 +36,7 @@ const Login = () => {
         setError(data.message);
         return;
       }
-      setToken(true);
+      setAuthenticated(true);
       navigateTo('/dashboard');
     } catch (error) {
       setError('An error occurred');

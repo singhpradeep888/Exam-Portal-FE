@@ -4,6 +4,7 @@ import Landing from './components/Landing/Landing';
 import Login from './components/Pages/Login';
 import Signup from './components/Pages/Signup';
 import Dashboard from './components/Dashboard/dashboard';
+import { VerifyEmail } from './components/Pages/VerifyEmail';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/verify" element={<VerifyEmail />} />
       </Routes>
     </Router>
   );

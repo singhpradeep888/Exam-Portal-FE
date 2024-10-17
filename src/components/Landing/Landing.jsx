@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Shield, Monitor, BarChart } from 'lucide-react';
-import useToken from '../../../App/useToken';
+import useAuth from '../../../App/useAuth';
 
 function Landing() {
-  const { token } = useToken();
+  const { isAuthenticated } = useAuth();
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -23,7 +23,7 @@ function Landing() {
           </a>
         </nav>
         <div className="mt-2 space-x-2">
-          {!token ? (
+          {!isAuthenticated ? (
             <>
               <Link to="/login">
                 <button className="px-4 py-2 border border-purple-500 text-purple-500 rounded hover:bg-purple-500 hover:text-white transition">
@@ -37,13 +37,11 @@ function Landing() {
               </Link>
             </>
           ) : (
-            <>
-              <Link to="/dashboard">
-                <button className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition">
-                  Dashboard
-                </button>
-              </Link>
-            </>
+            <Link to="/dashboard">
+              <button className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition">
+                Dashboard
+              </button>
+            </Link>
           )}
         </div>
       </header>

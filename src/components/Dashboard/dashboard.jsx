@@ -2,15 +2,15 @@
 import React, { useEffect } from 'react';
 import Sidebar from '../Sidebar/sidebar';
 import { useNavigate } from 'react-router-dom';
-import useToken from '../../../App/useToken';
+import useAuth from '../../../App/useAuth';
 
 function Dashboard() {
   const navigateTo = useNavigate();
-  const { token } = useToken();
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
-    if (!token) navigateTo('/Login');
-  }, [token, navigateTo]);
+    if (!isAuthenticated) navigateTo('/Login');
+  }, [isAuthenticated, navigateTo]);
 
   return (
     <div style={{ display: 'flex' }}>
