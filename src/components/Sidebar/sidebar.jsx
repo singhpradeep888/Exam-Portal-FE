@@ -5,7 +5,7 @@ import useAuth from '../../../App/useAuth';
 import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
-  const { setAuthenticated: setToken } = useAuth();
+  const { setAuthenticated, setVerified } = useAuth();
   const navigateTo = useNavigate();
 
   async function handleLogout(e) {
@@ -20,7 +20,8 @@ const Sidebar = () => {
         console.error('Failed to log out user');
         return;
       }
-      setToken(false);
+      setAuthenticated(false);
+      setVerified(false);
       navigateTo('/');
     } catch (error) {
       console.error(`Logout error: ${error.message}`);
