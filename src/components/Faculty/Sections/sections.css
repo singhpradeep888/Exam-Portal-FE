@@ -1,0 +1,58 @@
+.section-main {
+    display: flex;
+}
+
+.section-container {
+    padding: 1rem;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.section-main h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2e2e2e;
+    margin-bottom: 12px;
+}
+
+.section-form {
+    border: 1px solid rgb(231, 231, 231);
+    border-radius: 16px;
+    padding: 16px 16px;
+    width: max-content;
+}
+
+.section-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 380px;
+    margin-bottom: 8px;
+}
+
+.section-main input {
+    border: 1px solid rgb(231, 231, 231);
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+
+.section-main input[type=submit] {
+    background-color: rgb(7, 68, 199);
+    color: white;
+}
+
+.section-main input[type=file] {
+    display: block;
+    width: 100%;
+}
+
+.section-button-group {
+    padding-top: 1rem;
+    margin-top: 1rem;
+    border-top: 1px solid rgb(231, 231, 231);
+    display: flex;
+    justify-content: flex-end;
+    gap: .5rem;
+}

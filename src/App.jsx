@@ -6,7 +6,8 @@ import Signup from './components/Pages/Signup';
 import Dashboard from './components/Dashboard/dashboard';
 import VerifyEmail from './components/Pages/VerifyEmail';
 import ProtectedRoute from '../App/ProtectedRoute';
-import Exams from './components/Faculty/Exams';
+import Exams from './components/Faculty/Exams/Exams';
+import Sections from './components/Faculty/Sections/Sections';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path='/exams' element={<Exams />} />
+          <Route path='/exams/:examId/sections' element={<Sections />} />
         </Route>
         <Route path="/verify" element={<VerifyEmail />} />
         <Route path='*' element={<p>Page Not Found</p>} />
