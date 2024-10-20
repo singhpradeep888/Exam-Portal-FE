@@ -14,9 +14,14 @@ const Exams = () => {
   const [examData, setData] = useState(formInitialStates);
 
   function handleData(e) {
+    //  e.target.value should not be negative
+    //  and should only accept integer value not floating values.
     if (e.target.name === 'duration') {
-      // TODO : e.target.value should not be negative
-      // TODO : and should only accept integer value not floating values.
+      const intValue = parseInt(e.target.value, 10);
+      if(isNaN(intValue) || intValue < 0 ||  value.trim() === '' || value.includes('.')) {
+        return;
+      }
+      
     }
 
     setData({
