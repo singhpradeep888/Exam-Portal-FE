@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Sidebar from '../../Sidebar/sidebar';
-import './sections.css';
+import Sidebar from '/src/components/Sidebar/sidebar';
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
+import SectionForm from './SectionForm';
 
 function Sections() {
   useEffect(() => {
@@ -24,48 +25,40 @@ function Sections() {
       }
     }
     checkExamExistence();
-  });
+  }, []);
 
   const examId = useParams().examId;
   const navigateTo = useNavigate();
 
-  const formInitialStates = {
-    title: '',
-    duration: '',
-    num_questions: '',
-    rank: '',
-    question_sheet: null,
+  const [sections, setSections] = useState({});
+  const handleAddSection = () => {
+    setSections((prev) => ({ ...prev, [Object.keys(prev).length + 1]: {} }));
   };
-  const [sectionData, setData] = useState(formInitialStates);
 
-  const handleData = (e) => {
-    setData({
-      ...sectionData,
-      [e.target.name]: e.target.type === 'file' ? e.target.files[0] : e.target.value,
+  const handleValueChanges = (index, values) => {
+    setSections((prev) => ({ ...prev, [index]: values }));
+  };
+
+  const handleSectionDelete = (index) => {
+    setSections((prev) => {
+      const newSections = { ...prev };
+      delete newSections[index];
+      return newSections;
     });
   };
 
   const handleSubmission = async (e) => {
     e.preventDefault();
 
-    // verifying form data existence
-    let incompleteData = false;
-    for (const key of Object.keys(sectionData)) {
-      if (sectionData['key'] == '' || sectionData[key] == null) {
-        alert('Incomplete Data');
-        incompleteData = true;
-        break;
-      }
-    }
-    if (incompleteData) return;
+    console.log(sections);
+    return;
+
+    // TODO : Add the examId to the sections JSON.
     try {
       const response = await fetch('http://localhost:3000/exam/section/create', {
         method: 'POST',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(sectionData),
+        body: JSON.stringify(sections),
       });
 
       const data = await response.json();
@@ -77,77 +70,41 @@ function Sections() {
       }
 
       alert('Section created successfully');
+      console.log(data);
+      // TODO : Print the questions at the screen
       setData(formInitialStates);
     } catch (err) {
       console.log(`Add Exam Section Error:: ${err.message}`);
     }
   };
 
-  const handleReset = (e) => {
-    e.preventDefault();
-    setData(formInitialStates);
-    document.getElementById('question_sheet').value = '';
-  };
-
   return (
-    <div className="section-main">
-      <Sidebar />
-      <div className="section-container">
-        <form className="section-form" onSubmit={handleSubmission}>
-          <h1>Add Exam Sections.</h1>
-          <div className="section-input-container">
-            <label htmlFor="title">Section Title</label>
-            <input
-              type="text"
-              name="title"
-              id="title"
-              value={sectionData.title}
-              onChange={handleData}
-              placeholder="Title of section"
-            />
+    <div className="flex">
+        <Sidebar />
+      <div className="flex flex-1 flex-col p-4 w-full h-screen gap-4 overflow-y-auto">
+        {/* Header */}
+        <div className="flex justify-between items-center border-b py-4">
+          <h1 className="text-4xl font-bold text-gray-700">Create Sections.</h1>
+          <div>
+            <button
+              type="button"
+              className="flex items-center border border-blue-700 text-blue-700 px-3 py-2 rounded hover:text-white hover:bg-blue-700 text-sm"
+              onClick={handleAddSection}
+            >
+              <PlusCircleIcon className="size-4 me-2" />
+              Add More
+            </button>
           </div>
-          <div className="section-input-container">
-            <label htmlFor="duration">Section Duration (in minutes)</label>
-            <input
-              type="number"
-              name="duration"
-              id="duration"
-              value={sectionData.duration}
-              onChange={handleData}
-              placeholder="Duration of section"
-            />
-          </div>
-          <div className="section-input-container">
-            <label htmlFor="num_questions">No. of question</label>
-            <input
-              type="number"
-              name="num_questions"
-              id="num_questions"
-              value={sectionData.num_questions}
-              onChange={handleData}
-              placeholder="Questions to present in exam"
-            />
-          </div>
-          <div className="section-input-container">
-            <label htmlFor="num_questions">Section Rank</label>
-            <input
-              type="number"
-              name="rank"
-              id="rank"
-              value={sectionData.rank}
-              onChange={handleData}
-              placeholder="Section order rank"
-            />
-          </div>
-          <div className="section-input-container">
-            <label htmlFor="question_sheet">Upload Questions Excel Sheet</label>
-            <input type="file" name="question_sheet" id="question_sheet" onChange={handleData} />
-          </div>
-          <div className="section-button-group">
-            <input type="submit" value="Create" />
-            <input type="reset" onClick={handleReset} />
-          </div>
-        </form>
+        </div>
+        {/* Sections */}
+        <div id="sectionsContainer" className="flex flex-col gap-4">
+          {Object.entries(sections).map(([key, value]) => (
+            <SectionForm key={key} index={key} onValuesChange={handleValueChanges} onDelete={handleSectionDelete} />
+          ))}
+        </div>
+        <button type="button" className="text-black border" onClick={handleSubmission}>
+          Log data
+        </button>
       </div>
     </div>
   );
