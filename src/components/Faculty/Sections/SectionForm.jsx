@@ -7,11 +7,11 @@ const SectionForm = ({ index, onValuesChange, onDelete }) => {
   const formInitialStates = {
     title: '',
     duration: '',
-    rank: index,
     num_question: '',
     question_sheet: null,
   };
   const [sectionData, setData] = useState(formInitialStates);
+  const [isUpdating, setUpdating] = useState(true);
 
   const handleData = (e) => {
     const { name, type, files, value } = e.target;
@@ -81,7 +81,7 @@ const SectionForm = ({ index, onValuesChange, onDelete }) => {
     for (const key of Object.keys(sectionData)) {
       // Check if any input field is empty
       if (typeof sectionData[key] === 'string' && sectionData[key] === '') {
-        return { passed: false, message: `Section contains incomplete data ${key}` };
+        return { passed: false, message: `Section ${index} contains incomplete data: ${key}` };
       }
 
       // Check if the questions uploaded
@@ -130,7 +130,13 @@ const SectionForm = ({ index, onValuesChange, onDelete }) => {
       return;
     }
 
+    for (const key of Object.keys(sectionData)) {
+      document.getElementsByName(key)[0].disabled = true;
+    }
+
+    setData((prev) => ({ ...prev, rank: index }));
     onValuesChange(index, sectionData);
+    setUpdating(false);
   };
 
   const [showQuestion, setShowQuestions] = useState(false);
@@ -170,11 +176,10 @@ const SectionForm = ({ index, onValuesChange, onDelete }) => {
           label="Section Name"
           name="title"
           type="text"
-          placeholder="Type section name"
+          placeholder="Type section title"
           className="flex-1"
           value={sectionData.title}
           onChange={handleData}
-          disabled={true}
         />
         <Input
           label="Upload question sheet"
@@ -228,11 +233,16 @@ const SectionForm = ({ index, onValuesChange, onDelete }) => {
       )}
 
       <div className="flex w-full justify-end items-center gap-2">
-        {/* <Button onClick={() => onValuesChange(index, sectionData)}>Save</Button> */}
-        <Button onClick={handleSave}>Save</Button>
-        <Button variant="outline" className="border-red-700 text-red-700 hover:bg-red-100" onClick={handleDelete}>
-          Delete
-        </Button>
+        {isUpdating ? (
+          <>
+            <Button onClick={handleSave}>Save</Button>
+            <Button variant="outline" className="border-red-700 text-red-700 hover:bg-red-100" onClick={handleDelete}>
+              Delete
+            </Button>
+          </>
+        ) : (
+          <Button onClick={() => setUpdating(true)}>Update</Button>
+        )}
       </div>
     </div>
   );

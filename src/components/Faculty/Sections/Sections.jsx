@@ -3,8 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Sidebar from '/src/components/Sidebar/sidebar';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import SectionForm from './SectionForm';
+import Button from '../../ui/Button';
 
 function Sections() {
+  const examId = useParams().examId;
   useEffect(() => {
     async function checkExamExistence() {
       try {
@@ -25,9 +27,7 @@ function Sections() {
       }
     }
     checkExamExistence();
-  }, []);
-
-  const examId = useParams().examId;
+  }, [examId]);
   const navigateTo = useNavigate();
 
   const [sections, setSections] = useState({});
@@ -50,15 +50,21 @@ function Sections() {
   const handleSubmission = async (e) => {
     e.preventDefault();
 
+    if (Object.keys(sections).length == 0) {
+      alert('Exam should contain at least 1 section');
+      return;
+    }
     console.log(sections);
-    return;
-
+    // return;
     // TODO : Add the examId to the sections JSON.
     try {
       const response = await fetch('http://localhost:3000/exam/section/create', {
         method: 'POST',
         credentials: 'include',
-        body: JSON.stringify(sections),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ data: JSON.stringify(sections), examId: examId }),
       });
 
       const data = await response.json();
@@ -70,17 +76,15 @@ function Sections() {
       }
 
       alert('Section created successfully');
-      console.log(data);
-      // TODO : Print the questions at the screen
-      setData(formInitialStates);
+      setSections({});
     } catch (err) {
       console.log(`Add Exam Section Error:: ${err.message}`);
     }
   };
 
   return (
-    <div className="flex">
-        <Sidebar />
+    <div className="flex overflow-x-auto">
+      <Sidebar />
       <div className="flex flex-1 flex-col p-4 w-full h-screen gap-4 overflow-y-auto">
         {/* Header */}
         <div className="flex justify-between items-center border-b py-4">
@@ -92,19 +96,17 @@ function Sections() {
               onClick={handleAddSection}
             >
               <PlusCircleIcon className="size-4 me-2" />
-              Add More
+              Add Section
             </button>
           </div>
         </div>
         {/* Sections */}
-        <div id="sectionsContainer" className="flex flex-col gap-4">
+        <div id="sectionsContainer" className="flex flex-col flex-1 gap-4">
           {Object.entries(sections).map(([key, value]) => (
             <SectionForm key={key} index={key} onValuesChange={handleValueChanges} onDelete={handleSectionDelete} />
           ))}
         </div>
-        <button type="button" className="text-black border" onClick={handleSubmission}>
-          Log data
-        </button>
+        <Button onClick={handleSubmission}>Upload Sections</Button>
       </div>
     </div>
   );
