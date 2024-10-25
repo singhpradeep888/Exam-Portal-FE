@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../../App/useAuth';
 
-export const VerifyEmail = () => {
+const VerifyEmail = () => {
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
 
   const navigateTo = useNavigate();
-  const { isVerified, setVerified } = useAuth();
+  const { isVerified, setVerified, setAuthenticated } = useAuth();
 
   useEffect(() => {
     if (isVerified) {
@@ -68,6 +68,26 @@ export const VerifyEmail = () => {
     }
   }
 
+  async function logoutHandler(e) {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('http://localhost:3000/auth/logout', {
+        method: 'GET',
+        credentials: 'include'
+      });  
+      if (!response.ok) {
+        console.error('Failed to log out user');
+        return;
+      }
+      setAuthenticated(false);
+      setVerified(false);
+      navigateTo('/');
+    } catch (error) {
+      console.error(`Logout error: ${error.message}`);
+    }
+  }
+
   return (
     <div className="min-h-screen w-full relative flex items-center justify-center">
       <img src="loginsignup.jpg" alt="Verify" className="absolute inset-0 object-cover w-full h-full" />
@@ -89,6 +109,11 @@ export const VerifyEmail = () => {
               placeholder="XXXXXX"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
             />
+            <p className="mt-2 text-gray-700">
+              <button type="button" style={{ color: 'blue' }} onClick={resendOTP}>
+                Resend OTP
+              </button>
+            </p>
           </div>
           <button
             type="submit"
@@ -97,13 +122,14 @@ export const VerifyEmail = () => {
             Verify
           </button>
         </form>
-
         <p className="mt-4 text-gray-700 text-center">
-          <button type="button" style={{ color: 'blue' }} onClick={resendOTP}>
-            Resend OTP
+          <button type="button" style={{ color: 'red' }} onClick={logoutHandler}>
+            Logout
           </button>
         </p>
       </div>
     </div>
   );
 };
+
+export default VerifyEmail;

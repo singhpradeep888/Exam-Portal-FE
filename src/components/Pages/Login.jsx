@@ -7,7 +7,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigateTo = useNavigate();
-  const { isAuthenticated, setAuthenticated } = useAuth();
+  const { isAuthenticated, setAuthenticated, setVerified } = useAuth();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -37,6 +37,7 @@ const Login = () => {
         return;
       }
       setAuthenticated(true);
+      setVerified(data.userStatus);
       navigateTo('/dashboard');
     } catch (error) {
       setError('An error occurred');

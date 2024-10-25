@@ -4,7 +4,10 @@ import Landing from './components/Landing/Landing';
 import Login from './components/Pages/Login';
 import Signup from './components/Pages/Signup';
 import Dashboard from './components/Dashboard/dashboard';
-import { VerifyEmail } from './components/Pages/VerifyEmail';
+import VerifyEmail from './components/Pages/VerifyEmail';
+import ProtectedRoute from '../App/ProtectedRoute';
+import Exams from './components/Faculty/Exams/Exams';
+import Sections from './components/Faculty/Sections/Sections';
 
 function App() {
   return (
@@ -13,8 +16,13 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path='/exams' element={<Exams />} />
+          <Route path='/exams/:examId/sections' element={<Sections />} />
+        </Route>
         <Route path="/verify" element={<VerifyEmail />} />
+        <Route path='*' element={<p>Page Not Found</p>} />
       </Routes>
     </Router>
   );

@@ -1,16 +1,8 @@
 // App.js
-import React, { useEffect } from 'react';
+import React from 'react';
 import Sidebar from '../Sidebar/sidebar';
-import { useNavigate } from 'react-router-dom';
-import useAuth from '../../../App/useAuth';
 
 function Dashboard() {
-  const navigateTo = useNavigate();
-  const { isAuthenticated } = useAuth();
-
-  useEffect(() => {
-    if (!isAuthenticated) navigateTo('/Login');
-  }, [isAuthenticated, navigateTo]);
 
   return (
     <div style={{ display: 'flex' }}>
