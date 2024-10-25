@@ -8,6 +8,7 @@ import VerifyEmail from './components/Pages/VerifyEmail';
 import ProtectedRoute from '../App/ProtectedRoute';
 import Exams from './components/Faculty/Exams/Exams';
 import Sections from './components/Faculty/Sections/Sections';
+import Examinees from './components/Faculty/Examinees/Examinees';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path='/exams' element={<Exams />} />
           <Route path='/exams/:examId/sections' element={<Sections />} />
+          <Route path='/exams/:examId/sections/examinees' element={<Examinees />} />
         </Route>
         <Route path="/verify" element={<VerifyEmail />} />
         <Route path='*' element={<p>Page Not Found</p>} />

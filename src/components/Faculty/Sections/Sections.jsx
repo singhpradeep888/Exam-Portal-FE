@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import Sidebar from '/src/components/Sidebar/sidebar';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import SectionForm from './SectionForm';
@@ -54,9 +54,6 @@ function Sections() {
       alert('Exam should contain at least 1 section');
       return;
     }
-    console.log(sections);
-    // return;
-    // TODO : Add the examId to the sections JSON.
     try {
       const response = await fetch('http://localhost:3000/exam/section/create', {
         method: 'POST',
@@ -83,12 +80,12 @@ function Sections() {
   };
 
   return (
-    <div className="flex overflow-x-auto">
+    <div className="flex">
       <Sidebar />
-      <div className="flex flex-1 flex-col p-4 w-full h-screen gap-4 overflow-y-auto">
+      <div className="flex flex-1 flex-col p-4 w-full h-screen gap-4">
         {/* Header */}
         <div className="flex justify-between items-center border-b py-4">
-          <h1 className="text-4xl font-bold text-gray-700">Create Sections.</h1>
+          <h1 className="text-4xl font-bold text-gray-700">Exam Sections.</h1>
           <div>
             <button
               type="button"
@@ -101,12 +98,15 @@ function Sections() {
           </div>
         </div>
         {/* Sections */}
-        <div id="sectionsContainer" className="flex flex-col flex-1 gap-4">
+        <div id="sectionsContainer" className="flex flex-col flex-1 gap-4 overflow-y-auto">
           {Object.entries(sections).map(([key, value]) => (
             <SectionForm key={key} index={key} onValuesChange={handleValueChanges} onDelete={handleSectionDelete} />
           ))}
         </div>
-        <Button onClick={handleSubmission}>Upload Sections</Button>
+        <div className='border-t flex justify-end pt-4 gap-4'>
+          <Link to="examinees" className='px-8 py-3 rounded bg-blue-100 text-blue-700'>Skip</Link>
+        <Button onClick={handleSubmission}>Upload Sections & Continue</Button>
+        </div>
       </div>
     </div>
   );

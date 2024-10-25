@@ -8,7 +8,7 @@ export const Input = (props) => {
       </label>
       <input
         type={props.type} name={props.name} id={props.name}
-        className={`border border-1 outline-none rounded ps-4 pe-3 py-2 hover:border-blue-500 focus:border-blue-700`}
+        className={`border border-1 outline-none h-full rounded ps-4 pe-3 py-2 hover:border-blue-500 focus:border-blue-700`}
         placeholder={props.placeholder}
         value={props.value}
         onChange={props.onChange}
