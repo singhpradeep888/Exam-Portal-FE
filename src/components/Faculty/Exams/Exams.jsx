@@ -54,10 +54,14 @@ const Exams = () => {
     //  and should only accept integer value not floating values.
     if (e.target.name === 'duration') {
       const intValue = parseInt(e.target.value, 10);
-      if(isNaN(intValue) || intValue < 0 ||  e.target.value.trim() === '' || e.target.value.includes('.')) {
+      if (
+        isNaN(intValue) ||
+        intValue < 0 ||
+        e.target.value.trim() === '' ||
+        e.target.value.includes('.')
+      ) {
         return;
       }
-      
     }
 
     setData({
@@ -151,13 +155,18 @@ const Exams = () => {
             <input type="reset" onClick={handleReset} />
           </div>
         </form>
-        <div className='w-full'>
+        <div className="w-full">
           <h1 className="text-2xl pt-4 border-t">Scheduled Exams</h1>
-          <div id="examsList" className='flex flex-col w-full gap-4'>
+          <div id="examsList" className="flex flex-col w-full gap-4">
             {exams.map((item, index) => {
               return (
-                <Link to={`/exams/${item._id}/sections`} key={index} className='text-xl font-bold underline text-blue-500 p-4 border rounded w-1/2 cursor-pointer hover:bg-blue-50'>
-                  {item.title}
+                <Link
+                  to={`/exams/${item._id}/sections`}
+                  key={index}
+                  className="text-xl font-bold text-blue-500 p-4 border rounded w-1/2 cursor-pointer flex justify-between items-center hover:bg-blue-50"
+                >
+                  <span>{item.title}</span>
+                  <span className='text-sm text-gray-600 font-normal'>{new Date(item.startDate).toLocaleString()}</span>
                 </Link>
               );
             })}

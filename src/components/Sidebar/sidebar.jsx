@@ -31,7 +31,7 @@ const Sidebar = () => {
   }
 
   return (
-    <div className="flex bg-blue-600 h-screen top-0 bottom-0 left-0 w-80 px-4 py-8 align-top flex-col gap-8 ">
+    <div className="flex bg-blue-600 relative h-screen top-0 bottom-0 left-0 w-80 px-4 py-8 align-top flex-col gap-8 ">
       {/* Header */}
       <div className="flex justify-center h-10 w-full">
         <img src={logo} alt="" />
@@ -52,7 +52,9 @@ const Sidebar = () => {
         </a>
       </div>
       {/* Footer */}
-      <div></div>
+      <div className='bottom-0 absolute -ms-4 w-full p-4'>
+       <button type="button" onClick={handleLogout} className='rounded-lg p-4 text-blue-600 font-medium bg-white w-full'>Logout</button>
+      </div>
     </div>
   );
 };

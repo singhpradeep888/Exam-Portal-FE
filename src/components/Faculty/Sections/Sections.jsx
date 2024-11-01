@@ -30,10 +30,13 @@ function Sections() {
 
     async function getSections() {
       try {
-        const response = await fetch(`http://localhost:3000/exam/${examId}/section`, {
-          method: 'GET',
-          credentials: 'include',
-        });
+        const response = await fetch(
+          `http://localhost:3000/exam/${examId}/section`,
+          {
+            method: 'GET',
+            credentials: 'include',
+          }
+        );
 
         const data = await response.json();
         if (!response.ok) {
@@ -77,14 +80,20 @@ function Sections() {
 
     if (Object.keys(sections).length > 0) {
       try {
-        const response = await fetch('http://localhost:3000/exam/section/create', {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ data: JSON.stringify(sections), examId: examId }),
-        });
+        const response = await fetch(
+          'http://localhost:3000/exam/section/create',
+          {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              data: JSON.stringify(sections),
+              examId: examId,
+            }),
+          }
+        );
 
         const data = await response.json();
 
@@ -123,16 +132,22 @@ function Sections() {
         {/* Existing Sections */}
         {existingSections.length > 0 ? (
           <div className="existingSections">
-            <p className="font-bold text-xl text-gray-500 mb-4">Existing Sections</p>
+            <p className="font-bold text-xl text-gray-500 mb-4">
+              Existing Sections
+            </p>
             {existingSections.map((section) => {
               return (
                 <div key={section._id} className="border rounded-lg p-4">
                   <p className="text-blue-500 font-semibold">{section.title}</p>
                   <p>
-                    Duration: <span className="font-semibold">{`${section.duration} min`}</span>
+                    Duration:{' '}
+                    <span className="font-semibold">{`${section.duration} min`}</span>
                   </p>
                   <p>
-                    Allowed Questions: <span className="font-semibold">{section.num_question}</span>
+                    Allowed Questions:{' '}
+                    <span className="font-semibold">
+                      {section.num_question}
+                    </span>
                   </p>
                 </div>
               );
@@ -142,16 +157,30 @@ function Sections() {
           <></>
         )}
         {/* New Sections */}
-        <div id="sectionsContainer" className="flex flex-col flex-1 gap-4 overflow-y-auto">
+        <div
+          id="sectionsContainer"
+          className="flex flex-col flex-1 gap-4 overflow-y-auto"
+        >
           {Object.entries(sections).map(([key, value]) => (
-            <SectionForm key={key} index={key} onValuesChange={handleValueChanges} onDelete={handleSectionDelete} />
+            <SectionForm
+              key={key}
+              index={key}
+              onValuesChange={handleValueChanges}
+              onDelete={handleSectionDelete}
+            />
           ))}
         </div>
         {/* Action Buttons */}
         <div className="border-t flex justify-end pt-4 gap-4">
-          <Link to="examinees" className="px-8 py-3 rounded bg-blue-100 text-blue-700">
-            Skip
-          </Link>
+          {(existingSections.length > 0 ||
+            Object.keys(sections).length > 0) && (
+            <Link
+              to="examinees"
+              className="px-8 py-3 rounded bg-blue-100 text-blue-700"
+            >
+              Skip
+            </Link>
+          )}
           <Button onClick={handleSubmission}>Upload Sections & Continue</Button>
         </div>
       </div>

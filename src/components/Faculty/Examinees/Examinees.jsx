@@ -198,10 +198,10 @@ const Examinees = () => {
 
           {existingExaminees.length > 0 ? (
             <>
-              <h1 className="text-2xl text-gray-500 mt-4">
+              <h1 className="text-2xl text-gray-500 mt-4 mb-2">
                 Existing Examinees
               </h1>
-              <div className="relative overflow-x-auto border sm:rounded-lg">
+              <div className="relative overflow-x-auto border rounded-lg">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
