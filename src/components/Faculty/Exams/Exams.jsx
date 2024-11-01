@@ -54,7 +54,7 @@ const Exams = () => {
     //  and should only accept integer value not floating values.
     if (e.target.name === 'duration') {
       const intValue = parseInt(e.target.value, 10);
-      if(isNaN(intValue) || intValue < 0 ||  value.trim() === '' || value.includes('.')) {
+      if(isNaN(intValue) || intValue < 0 ||  e.target.value.trim() === '' || e.target.value.includes('.')) {
         return;
       }
       

@@ -153,10 +153,10 @@ const SectionForm = ({ index, onValuesChange, onDelete }) => {
         {question.Type.toLowerCase() == 'mcq' ? (
           <>
             <p className="font-semibold">Options:</p>
-            <p>a&gt; {question['Option 1']}</p>
-            <p>b&gt; {question['Option 2']}</p>
-            <p>c&gt; {question['Option 3']}</p>
-            <p>d&gt; {question['Option 4']}</p>
+            <p><b>a&gt;</b> {question['Option 1']}</p>
+            <p><b>b&gt;</b> {question['Option 2']}</p>
+            <p><b>c&gt;</b> {question['Option 3']}</p>
+            <p><b>d&gt;</b> {question['Option 4']}</p>
           </>
         ) : (
           <></>

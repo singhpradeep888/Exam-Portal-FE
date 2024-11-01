@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import Sidebar from '/src/components/Sidebar/sidebar';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import SectionForm from './SectionForm';
@@ -7,6 +7,7 @@ import Button from '../../ui/Button';
 
 function Sections() {
   const examId = useParams().examId;
+  const [existingSections, setExistingSections] = useState([]);
   useEffect(() => {
     async function checkExamExistence() {
       try {
@@ -26,7 +27,26 @@ function Sections() {
         navigateTo('/exams');
       }
     }
+
+    async function getSections() {
+      try {
+        const response = await fetch(`http://localhost:3000/exam/${examId}/section`, {
+          method: 'GET',
+          credentials: 'include',
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+          alert(`${data.message}`);
+          return;
+        }
+        setExistingSections(data.data);
+      } catch (ex) {
+        console.log(`Get Sections Error::: ${ex.message}`);
+      }
+    }
     checkExamExistence();
+    getSections();
   }, [examId]);
   const navigateTo = useNavigate();
 
@@ -50,45 +70,45 @@ function Sections() {
   const handleSubmission = async (e) => {
     e.preventDefault();
 
-    if (Object.keys(sections).length == 0) {
+    if (Object.keys(sections).length == 0 && existingSections.length == 0) {
       alert('Exam should contain at least 1 section');
       return;
     }
-    console.log(sections);
-    // return;
-    // TODO : Add the examId to the sections JSON.
-    try {
-      const response = await fetch('http://localhost:3000/exam/section/create', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ data: JSON.stringify(sections), examId: examId }),
-      });
 
-      const data = await response.json();
+    if (Object.keys(sections).length > 0) {
+      try {
+        const response = await fetch('http://localhost:3000/exam/section/create', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ data: JSON.stringify(sections), examId: examId }),
+        });
 
-      if (!response.ok) {
-        alert('Failed to create section');
-        console.log(`Add Exam Section Error:: ${data.message}`);
-        return;
+        const data = await response.json();
+
+        if (!response.ok) {
+          alert('Failed to create section');
+          console.log(`Add Exam Section Error:: ${data.message}`);
+          return;
+        }
+
+        alert('Section created successfully');
+        setSections({});
+      } catch (err) {
+        console.log(`Add Exam Section Error:: ${err.message}`);
       }
-
-      alert('Section created successfully');
-      setSections({});
-    } catch (err) {
-      console.log(`Add Exam Section Error:: ${err.message}`);
     }
   };
 
   return (
-    <div className="flex overflow-x-auto">
+    <div className="flex">
       <Sidebar />
-      <div className="flex flex-1 flex-col p-4 w-full h-screen gap-4 overflow-y-auto">
+      <div className="flex flex-1 flex-col p-4 w-full h-screen gap-4">
         {/* Header */}
         <div className="flex justify-between items-center border-b py-4">
-          <h1 className="text-4xl font-bold text-gray-700">Create Sections.</h1>
+          <h1 className="text-4xl font-bold text-gray-700">Exam Sections.</h1>
           <div>
             <button
               type="button"
@@ -100,13 +120,40 @@ function Sections() {
             </button>
           </div>
         </div>
-        {/* Sections */}
-        <div id="sectionsContainer" className="flex flex-col flex-1 gap-4">
+        {/* Existing Sections */}
+        {existingSections.length > 0 ? (
+          <div className="existingSections">
+            <p className="font-bold text-xl text-gray-500 mb-4">Existing Sections</p>
+            {existingSections.map((section) => {
+              return (
+                <div key={section._id} className="border rounded-lg p-4">
+                  <p className="text-blue-500 font-semibold">{section.title}</p>
+                  <p>
+                    Duration: <span className="font-semibold">{`${section.duration} min`}</span>
+                  </p>
+                  <p>
+                    Allowed Questions: <span className="font-semibold">{section.num_question}</span>
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <></>
+        )}
+        {/* New Sections */}
+        <div id="sectionsContainer" className="flex flex-col flex-1 gap-4 overflow-y-auto">
           {Object.entries(sections).map(([key, value]) => (
             <SectionForm key={key} index={key} onValuesChange={handleValueChanges} onDelete={handleSectionDelete} />
           ))}
         </div>
-        <Button onClick={handleSubmission}>Upload Sections</Button>
+        {/* Action Buttons */}
+        <div className="border-t flex justify-end pt-4 gap-4">
+          <Link to="examinees" className="px-8 py-3 rounded bg-blue-100 text-blue-700">
+            Skip
+          </Link>
+          <Button onClick={handleSubmission}>Upload Sections & Continue</Button>
+        </div>
       </div>
     </div>
   );
