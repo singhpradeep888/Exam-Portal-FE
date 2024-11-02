@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Sidebar from '../../Sidebar/sidebar';
+import Sidebar from '/src/components/Faculty/Sidebar/sidebar';
 import React from 'react';
 import './exams.css';
 import { Link } from 'react-router-dom';
@@ -14,7 +14,6 @@ const Exams = () => {
           credentials: 'include',
         });
         const data = await request.json();
-
         if (!request.ok) {
           alert(`Failed to retrieve exams,\n${data.message}, ${data?.error}`);
           return;
@@ -45,6 +44,7 @@ const Exams = () => {
     title: '',
     duration: '',
     startDate: '',
+    startTime: '',
   };
 
   const [examData, setData] = useState(formInitialStates);
@@ -73,10 +73,13 @@ const Exams = () => {
   async function handleSubmission(e) {
     e.preventDefault();
 
-    if (!examData.title || !examData.duration || !examData.startDate) {
+    if (!examData.title || !examData.duration || !examData.startDate || !examData.startTime) {
       alert('Incomplete Data');
       return;
     }
+
+    console.log(examData)
+    // return;
 
     try {
       const response = await fetch('http://localhost:3000/exam/', {
@@ -149,6 +152,17 @@ const Exams = () => {
                 placeholder="Date of exam"
               />
             </div>
+            <div className="exam-input-container flex-1">
+              <label htmlFor="startTime">Exam Time</label>
+              <input
+                type="time"
+                name="startTime"
+                id="startTime"
+                value={examData.startTime}
+                onChange={handleData}
+                placeholder="Time of exam"
+              />
+            </div>
           </div>
           <div className="w-full flex justify-end items-center gap-4 mt-2">
             <input type="submit" value="Create" />
@@ -166,7 +180,9 @@ const Exams = () => {
                   className="text-xl font-bold text-blue-500 p-4 border rounded w-1/2 cursor-pointer flex justify-between items-center hover:bg-blue-50"
                 >
                   <span>{item.title}</span>
-                  <span className='text-sm text-gray-600 font-normal'>{new Date(item.startDate).toLocaleString()}</span>
+                  <span className="text-sm text-gray-600 font-normal">
+                    {new Date(item.startDate).toLocaleString()}
+                  </span>
                 </Link>
               );
             })}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import Sidebar from '/src/components/Sidebar/sidebar';
+import Sidebar from '/src/components/Faculty/Sidebar/sidebar';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import SectionForm from './SectionForm';
 import Button from '../../ui/Button';
@@ -137,7 +137,7 @@ function Sections() {
             </p>
             {existingSections.map((section) => {
               return (
-                <div key={section._id} className="border rounded-lg p-4">
+                <div key={section._id} className="border rounded-lg p-4 mt-2">
                   <p className="text-blue-500 font-semibold">{section.title}</p>
                   <p>
                     Duration:{' '}

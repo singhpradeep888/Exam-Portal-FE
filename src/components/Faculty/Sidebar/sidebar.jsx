@@ -1,13 +1,13 @@
 // Sidebar.js
 import React from 'react';
 import './sidebar.css';
-import useAuth from '../../../App/useAuth';
+import useAuth from '../../../../App/useAuth';
 import { useNavigate } from 'react-router-dom';
-import logo from '/logo.svg';
+import appLogo from '../../../../src/logo.svg';
 import { HomeIcon, UserIcon, UserGroupIcon, FolderIcon, PresentationChartBarIcon } from '@heroicons/react/24/outline';
 
 const Sidebar = () => {
-  const { setAuthenticated, setVerified } = useAuth();
+  const { setAuthenticated, setVerified, role } = useAuth();
   const navigateTo = useNavigate();
 
   async function handleLogout(e) {
@@ -34,16 +34,16 @@ const Sidebar = () => {
     <div className="flex bg-blue-600 relative h-screen top-0 bottom-0 left-0 w-80 px-4 py-8 align-top flex-col gap-8 ">
       {/* Header */}
       <div className="flex justify-center h-10 w-full">
-        <img src={logo} alt="" />
+        <img src={appLogo} alt="" />
       </div>
       {/* Navbar */}
       <div className='flex flex-col gap-4'>
         <a href='/dashboard' className="text-white flex align-middle px-4 py-3 w-full rounded hover:bg-blue-700">
           <HomeIcon className="size-6 text-white me-2" /> Dashboard
         </a>
-        <a href='#' className="text-white flex align-middle px-4 py-3 w-full rounded hover:bg-blue-700">
+        {role.toLowerCase() == 'faculty' && <a href='#' className="text-white flex align-middle px-4 py-3 w-full rounded hover:bg-blue-700">
           <UserGroupIcon className="size-6 text-white me-2" /> Groups
-        </a>
+        </a>}
         <a href='/exams' className="text-white flex align-middle px-4 py-3 w-full rounded hover:bg-blue-700">
           <FolderIcon className="size-6 text-white me-2" /> Exams
         </a>

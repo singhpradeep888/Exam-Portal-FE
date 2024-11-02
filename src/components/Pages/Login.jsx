@@ -7,7 +7,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigateTo = useNavigate();
-  const { isAuthenticated, setAuthenticated, setVerified } = useAuth();
+  const { isAuthenticated, setAuthenticated, setVerified, setRole, setUser } = useAuth();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -31,13 +31,15 @@ const Login = () => {
         }),
       });
       const data = await response.json();
-
+      const user = data.userData;
+      console.log('User Data', user);
       if (!response.ok) {
         setError(data.message);
         return;
-      }
+      } 
       setAuthenticated(true);
-      setVerified(data.userStatus);
+      setVerified(user.verified);
+      setRole(user.role);
       navigateTo('/dashboard');
     } catch (error) {
       setError('An error occurred');
@@ -47,17 +49,30 @@ const Login = () => {
 
   return (
     <div className="min-h-screen w-full relative flex items-center justify-center">
-      <img src="loginsignup.jpg" alt="Login" className="absolute inset-0 object-cover w-full h-full" />
+      <img
+        src="loginsignup.jpg"
+        alt="Login"
+        className="absolute inset-0 object-cover w-full h-full"
+      />
       <div className="absolute inset-0 bg-black opacity-50"></div>
 
       <div className="relative z-10 w-full max-w-md mx-auto p-8 bg-white bg-opacity-80 backdrop-blur-md rounded-lg shadow-xl">
-        <h2 className="text-3xl font-bold text-gray-800 text-center mb-4">Login</h2>
+        <h2 className="text-3xl font-bold text-gray-800 text-center mb-4">
+          Login
+        </h2>
 
-        {error && <p className="text-red-500 p-2 px-4 mb-4 bg-red-100 rounded-md">{error}</p>}
+        {error && (
+          <p className="text-red-500 p-2 px-4 mb-4 bg-red-100 rounded-md">
+            {error}
+          </p>
+        )}
 
         <form onSubmit={handleLogin} className="mt-6">
           <div className="mb-4">
-            <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">
+            <label
+              htmlFor="email"
+              className="block text-gray-700 font-semibold mb-2"
+            >
               Email
             </label>
             <input
@@ -70,7 +85,10 @@ const Login = () => {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="password" className="block text-gray-700 font-semibold mb-2">
+            <label
+              htmlFor="password"
+              className="block text-gray-700 font-semibold mb-2"
+            >
               Password
             </label>
             <input
