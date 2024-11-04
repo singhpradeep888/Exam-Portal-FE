@@ -9,6 +9,8 @@ import Dashboard from './components/Pages/Dashboard';
 import Exams from './components/Pages/Exams';
 import Sections from './components/Pages/Sections';
 import AdminExaminees from './components/Faculty/Examinees/Examinees';
+import AttemptExam from './components/Students/AttemptExam';
+import AttempQuestions from './components/Students/AttemptQuestions';
 
 function App() {
   return (
@@ -25,6 +27,11 @@ function App() {
           <Route
             path="/exams/:examId/sections/examinees"
             element={<AdminExaminees />}
+          />
+          <Route path="/attempt-exam" element={<AttemptExam />} />
+          <Route
+            path="/attempt-exam/attempt-question"
+            element={<AttempQuestions />}
           />
         </Route>
         <Route path="*" element={<p>Page Not Found</p>} />

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Shield, Monitor, BarChart } from 'lucide-react';
 import useAuth from '../../../App/useAuth';
+import logo from '../../../src/Logo.svg';
+import logoIcon from '../../../src/logo-icon.svg';
 
 function Landing() {
   const { isAuthenticated } = useAuth();
@@ -9,8 +11,8 @@ function Landing() {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header and Hero Section Combined */}
-      <header className="flex  items-start justify-between p-5 bg-white shadow-md rounded-b-lg">
-        <div className="text-2xl font-bold text-gray-800">ExamNest</div>
+      <header className="flex items-center justify-between p-5 px-8 bg-white shadow-md rounded-b-lg">
+        <img src={logo} alt="" />
         <nav className="mt-2 space-x-4">
           <a href="#home" className="text-gray-600 hover:text-gray-900">
             Home
@@ -47,8 +49,8 @@ function Landing() {
       </header>
 
       {/* Hero Section */}
-      <section className="flex flex-row py-20 bg-white rounded-lg mx-4 mt-5 relative">
-        <div className="bg-white p-8 rounded-lg max-w text-left">
+      <section className="flex flex-row justify-between items-center px-40 py-20 bg-white rounded-lg mx-4 mt-5 relative">
+        <div className="bg-white p-8 rounded-lg w-3/6 text-left">
           <h1 className="text-6xl font-bold text-gray-800 mb-4">Conduct Seamless, Secure Exams with Ease.</h1>
           <p className="text-lg text-gray-600 mb-8">
             The ultimate platform for creating, managing, and conducting online exams.
@@ -58,13 +60,10 @@ function Landing() {
           </button>
         </div>
         {/* Background Icon */}
-        <div className="relative bottom-0 left-10 w-full ">
           <img
-            src="https://cdn-icons-png.flaticon.com/512/2828/2828710.png"
-            alt="Background Icon"
-            className="w-24 h-24 opacity-10 mt-10"
+            src={logoIcon}
+            className='w-52 h-52'
           />
-        </div>
       </section>
 
       {/* Features Section */}

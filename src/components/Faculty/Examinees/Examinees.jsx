@@ -22,11 +22,11 @@ const Examinees = () => {
         const data = await response.json();
 
         if (!response.ok) {
-          console.log(`Exam Error:: ${data.message}`);
+          alert(`Exam Error:: ${data.message}`);
           navigateTo('/exams');
         }
       } catch (err) {
-        console.log(`Exam Error:: ${err.message}`);
+        alert(`Exam Error:: ${err.message}`);
         navigateTo('/exams');
       }
     }
