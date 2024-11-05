@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Sidebar from '../Faculty/Sidebar/sidebar';
-import Button from '../ui/Button';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
   const [exams, setExams] = useState([]);
   const containerRef = useRef(null);
+  const navigateTo = useNavigate();
 
   useEffect(() => {
     const getExams = async () => {
@@ -18,6 +19,77 @@ export default function Dashboard() {
     getExams();
   }, []);
 
+  /** 
+   * * Function to get into the full screen mode.
+  const gotoFullScreen = (e) => {
+    e.preventDefault();
+
+    if (containerRef.current) {
+      console.log('executed');
+      if (containerRef.current.requestFullscreen) {
+        containerRef.current.requestFullscreen();
+      } else if (containerRef.current.mozRequestFullScreen) {
+        // Firefox
+        containerRef.current.mozRequestFullScreen();
+      } else if (containerRef.current.webkitRequestFullscreen) {
+        // Chrome, Safari and Opera
+        containerRef.current.webkitRequestFullscreen();
+      } else if (containerRef.current.msRequestFullscreen) {
+        // IE/Edge
+        containerRef.current.msRequestFullscreen();
+      }
+      // Optionally disable pointer events or add a listener
+      // document.addEventListener('visibilitychange', handleVisibilityChange);
+    }
+  };
+  */
+
+  const reqMediaPermissions = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true,
+      });
+      console.log('Audio and Vidoe Access Granted');
+      return stream;
+    } catch (err) {
+      console.error(`Error Accessing Media Devices`, err);
+    }
+  };
+
+  const reqScreenSharingPermission = async () => {
+    try {
+      const screenStream = await navigator.mediaDevices.getDisplayMedia({
+        video: {
+          cursor: 'always', // Options: "always", "motion", "never"
+        },
+      });
+      console.log('Screen Access Granted');
+      return screenStream;
+    } catch (err) {
+      console.error(`Error in Screen Sharing`, err);
+    }
+  };
+
+  const requestAllPermissions = async () => {
+    const mediaStream = await reqMediaPermissions();
+    const screenStream = await reqScreenSharingPermission();
+
+    if (mediaStream && screenStream) {
+      console.log('All permissions granted');
+      // Combine streams if needed, e.g., using MediaStream.addTrack()
+      // mediaStream.getTracks().forEach(track => {
+      //   screenStream.addTrack(track);
+      // });
+    }
+  };
+
+  const handleAttemptExam = async (e) => {
+    e.preventDefault();
+
+    
+  };
+
   return (
     <div className="flex">
       <Sidebar />
@@ -26,7 +98,7 @@ export default function Dashboard() {
           Student Dashboard
         </p>
         {exams && (
-          <div className="border rounded-xl shadow-sm max-h-80 overflow-hidden">
+          <div className="border rounded-xl shadow-sm max-h-80 overflow-y-scroll">
             <p className="text-xl font-semibold text-gray-700 p-4">
               Recent Exams
             </p>
@@ -51,7 +123,7 @@ export default function Dashboard() {
                 {exams.map((exam, index) => (
                   <tr
                     key={index}
-                    className="odd:bg-white  even:bg-gray-50 border-b "
+                    className="odd:bg-white  even:bg-gray-50 border-b hover:bg-slate-50"
                   >
                     <th
                       scope="row"
@@ -61,7 +133,13 @@ export default function Dashboard() {
                     </th>
                     <td className="px-6 py-4">{exam.examName}</td>
                     <td className="px-6 py-4">
-                      {new Date(exam.startDate).toLocaleString()}
+                      {new Date(exam.startDate).toLocaleString('en-IN', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
                     </td>
                     <td className="px-6 py-4">
                       {(() => {
@@ -86,9 +164,12 @@ export default function Dashboard() {
                           // Exam is ongoing
                           return (
                             <button
-                              type="button"
-                              key={exam._id}
                               className="rounded bg-blue-600 font-medium px-4 py-2 text-white hover:bg-blue-700"
+                              onClick={() =>
+                                navigateTo('/attempt-exam', {
+                                  state: { examId: exam.examId },
+                                })
+                              }
                             >
                               Attempt Now
                             </button>

@@ -3,7 +3,7 @@ import React from 'react';
 import './sidebar.css';
 import useAuth from '../../../../App/useAuth';
 import { useNavigate } from 'react-router-dom';
-import appLogo from '../../../../src/logo.svg';
+import appLogo from '../../../../src/logo-white.svg';
 import { HomeIcon, UserIcon, UserGroupIcon, FolderIcon, PresentationChartBarIcon } from '@heroicons/react/24/outline';
 
 const Sidebar = () => {

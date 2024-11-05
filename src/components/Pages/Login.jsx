@@ -7,7 +7,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigateTo = useNavigate();
-  const { isAuthenticated, setAuthenticated, setVerified, setRole, setUser } = useAuth();
+  const { isAuthenticated, setAuthenticated, setVerified, setRole } = useAuth();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -32,7 +32,6 @@ const Login = () => {
       });
       const data = await response.json();
       const user = data.userData;
-      console.log('User Data', user);
       if (!response.ok) {
         setError(data.message);
         return;

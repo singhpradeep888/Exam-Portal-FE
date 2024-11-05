@@ -3,9 +3,11 @@ import Sidebar from '/src/components/Faculty/Sidebar/sidebar';
 import React from 'react';
 import './exams.css';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Exams = () => {
   const [exams, setExams] = useState([]);
+  const navigateTo = useNavigate();
 
   useEffect(() => {
     async function fetchExams() {
@@ -22,7 +24,6 @@ const Exams = () => {
         if (data.data.length === 0) {
           const p = document.createElement('p');
           p.appendChild(document.createTextNode(`No exams found`));
-          console.log(p);
           document.getElementById('examsList').appendChild(p);
           return;
         }
@@ -78,9 +79,6 @@ const Exams = () => {
       return;
     }
 
-    console.log(examData)
-    // return;
-
     try {
       const response = await fetch('http://localhost:3000/exam/', {
         method: 'POST',
@@ -95,21 +93,23 @@ const Exams = () => {
 
       if (!response.ok) {
         console.log('Request failed', data.message);
+        alert(data.message);
         return;
       }
       // storing Exam ID in session for further usage.
       sessionStorage.setItem('exam', data.data.id);
       setData(formInitialStates);
       alert('Exam Created');
+      navigateTo(`/exams/${data.data.id}/sections`)
     } catch (err) {
       console.log(`Create Exam Error:: ${err.message}`);
+      alert(err.message);
     }
   }
 
   function handleReset(e) {
     e.preventDefault();
     setData(formInitialStates);
-    console.log(examData);
   }
 
   return (

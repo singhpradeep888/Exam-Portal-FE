@@ -39,7 +39,6 @@ const useAuth = () => {
     const [role, setRole] = useState(getRole());
 
     const saveRole = (role) => {
-        console.log(role);
         sessionStorage.setItem(ROLE_STATUS_KEY, role);
         setRole(role);
     };

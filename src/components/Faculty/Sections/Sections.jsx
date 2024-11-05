@@ -46,6 +46,7 @@ function Sections() {
         setExistingSections(data.data);
       } catch (ex) {
         console.log(`Get Sections Error::: ${ex.message}`);
+        alert('Error: ', ex.message);
       }
     }
     checkExamExistence();
@@ -106,6 +107,7 @@ function Sections() {
         alert('Section created successfully');
         setSections({});
       } catch (err) {
+        alert(`Failed to create section ${err.message}`);
         console.log(`Add Exam Section Error:: ${err.message}`);
       }
     }
