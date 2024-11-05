@@ -11,6 +11,7 @@ import Sections from './components/Pages/Sections';
 import AdminExaminees from './components/Faculty/Examinees/Examinees';
 import AttemptExam from './components/Students/AttemptExam';
 import AttempQuestions from './components/Students/AttemptQuestions';
+import SubmitSection from './components/Students/SubmitSection';
 
 function App() {
   return (
@@ -32,6 +33,10 @@ function App() {
           <Route
             path="/attempt-exam/attempt-question"
             element={<AttempQuestions />}
+          />
+          <Route
+            path="/attempt-exam/submit-section"
+            element={<SubmitSection />}
           />
         </Route>
         <Route path="*" element={<p>Page Not Found</p>} />

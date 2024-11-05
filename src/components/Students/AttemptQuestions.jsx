@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function AttempQuestions() {
   const location = useLocation();
+  const navigateTo = useNavigate();
   const { section, examId } = location.state;
   const [questions, setQuestions] = useState([]);
   const initialFormState = {
@@ -11,30 +12,6 @@ export default function AttempQuestions() {
   };
   const [formData, setFormData] = useState(initialFormState);
   const [quesIdx, setQuesIdx] = useState(-1);
-
-  const setAttemptingSection = async () => {
-    try {
-      const url = 'http://localhost:3000/exam/section/attempt-section';
-      const response = await fetch(url, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          sectionData: { examId, sectionId: section._id },
-        }),
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        alert(data.message);
-        return navigateTo('/dashboard');
-      }
-    } catch (err) {
-      alert(err.message);
-    }
-  };
 
   const getQuestions = async () => {
     try {
@@ -73,17 +50,41 @@ export default function AttempQuestions() {
     }
   };
 
+  const setAttemptingSection = async () => {
+    try {
+      const url = 'http://localhost:3000/exam/section/attempt-section';
+      const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sectionData: { examId, sectionId: section._id },
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        alert(data.message);
+        return navigateTo('/dashboard');
+      } else {
+        getQuestions();
+      }
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   useEffect(() => {
     setAttemptingSection();
-    getQuestions();
   }, []);
 
   const handleForm = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleAnswerSubmission = async (e) => {
-    e.preventDefault();
+  const addAnswerToDB = async (type = 'submit') => {
     setQuestions((prev) => {
       let i = 0;
       const updatedData = [];
@@ -96,9 +97,10 @@ export default function AttempQuestions() {
         const obj = {
           ...questions[quesIdx],
           ...formData,
-          status: 'attempted',
+          answer: type == 'submit' ? formData.answer : '',
+          status: type == 'submit' ? 'attempted' : 'skipped',
           result:
-            formData.answer == questions[quesIdx].correctAns
+            type == 'submit' && formData.answer == questions[quesIdx].correctAns
               ? 'correct'
               : 'incorrect',
         };
@@ -107,9 +109,6 @@ export default function AttempQuestions() {
       }
       return updatedData;
     });
-    // setFormData((prev) => initialFormState);
-    // if (quesIdx != questions.length - 1) setQuesIdx((prev) => prev + 1);
-    // return;
     try {
       const response = await fetch(
         'http://localhost:3000/exam/section/question/submit',
@@ -123,8 +122,10 @@ export default function AttempQuestions() {
             answerData: {
               ...questions[quesIdx],
               ...formData,
-              status: 'attempted',
+              answer: type == 'submit' ? formData.answer : '',
+              status: type == 'submit' ? 'attempted' : 'skipped',
               result:
+                type == 'submit' &&
                 formData.answer == questions[quesIdx].correctAns
                   ? 'correct'
                   : 'incorrect',
@@ -142,6 +143,89 @@ export default function AttempQuestions() {
     } catch (err) {
       alert(err.message);
     }
+  };
+
+  const handleAnswerSubmission = async (e) => {
+    e.preventDefault();
+    // setQuestions((prev) => {
+    //   let i = 0;
+    //   const updatedData = [];
+    //   while (i < questions.length) {
+    //     if (i != quesIdx) {
+    //       updatedData.push(questions[i]);
+    //       i++;
+    //       continue;
+    //     }
+    //     const obj = {
+    //       ...questions[quesIdx],
+    //       ...formData,
+    //       status: 'attempted',
+    //       result:
+    //         formData.answer == questions[quesIdx].correctAns
+    //           ? 'correct'
+    //           : 'incorrect',
+    //     };
+    //     updatedData.push(obj);
+    //     i++;
+    //   }
+    //   return updatedData;
+    // });
+    // setFormData((prev) => initialFormState);
+    // if (quesIdx != questions.length - 1) setQuesIdx((prev) => prev + 1);
+    // return;
+    // try {
+    //   const response = await fetch(
+    //     'http://localhost:3000/exam/section/question/submit',
+    //     {
+    //       method: 'POST',
+    //       credentials: 'include',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //       body: JSON.stringify({
+    //         answerData: {
+    //           ...questions[quesIdx],
+    //           ...formData,
+    //           status: 'attempted',
+    //           result:
+    //             formData.answer == questions[quesIdx].correctAns
+    //               ? 'correct'
+    //               : 'incorrect',
+    //         },
+    //       }),
+    //     }
+    //   );
+    //   const data = await response.json();
+    //   if (!response.ok) {
+    //     alert(data.message);
+    //     return;
+    //   }
+    //   setFormData((prev) => initialFormState);
+    //   if (quesIdx != questions.length - 1) setQuesIdx((prev) => prev + 1);
+    // } catch (err) {
+    //   alert(err.message);
+    // }
+    addAnswerToDB();
+  };
+
+  const handleSkipQues = async (e) => {
+    e.preventDefault();
+    addAnswerToDB('skip');
+  };
+
+  const handleFinishSection = (e) => {
+    e.preventDefault();
+    const result = {
+      attempted: 0,
+      skipped: 0,
+      unattempted: 0,
+      examId,
+      sectionId: section._id,
+    };
+    questions.forEach((question) => {
+      result[question.status] = ++result[question.status];
+    });
+    navigateTo('/attempt-exam/submit-section', {state: {data: result}})
   };
 
   return (
@@ -194,7 +278,7 @@ export default function AttempQuestions() {
           <div className="flex-1 border-e h-full relative">
             <p className="text-gray-700 text-xl px-6 py-10 bg-gray-100 font-medium">
               <span className="text-xs font-regular text-black">
-                Question:
+                Question: {quesIdx + 1}
                 <br />
               </span>
               {questions[quesIdx].title}
@@ -240,30 +324,42 @@ export default function AttempQuestions() {
               <div className="flex justify-end items-center gap-4 p-4 absolute bottom-0 w-full">
                 <button
                   type="submit"
-                  className="p-4 rounded bg-blue-400 font-semibold text-white"
+                  className="p-4 rounded bg-blue-700 hover:bg-blue-800 font-semibold text-white"
                 >
                   Submit Answer
                 </button>
-                <button className="p-4 rounded bg-blue-800 font-semibold text-white">
-                  Next
+                <button
+                  onClick={handleSkipQues}
+                  className="py-4 px-8 rounded bg-yellow-700 hover:bg-yellow-800 font-semibold text-white"
+                >
+                  Skip
                 </button>
               </div>
             </form>
           </div>
         ) : (
-          <>
-            {(() => {
-              for (let i = 0; i < questions.length; i++) {
-                if (questions[i].status == 'unattempted' && quesIdx == -1) {
-                  setQuesIdx((prev) => i);
-                  break;
-                }
-              }
-            })()}
-          </>
+          questions.forEach((q, idx) => {
+            if (q.status == 'unattempted' && quesIdx == -1) {
+              setQuesIdx((prev) => idx);
+            } else if (idx == section.num_question - 1 && quesIdx == -1) {
+              setQuesIdx((prev) => 0);
+            }
+          })
         )}
         {/* Don't know why I created it... */}
-        <div className="w-1/5 border-e h-full"></div>
+        <div className="w-1/5 border-e h-full flex flex-col p-5">
+          <div className="flex-1">
+            <p className="text-xl">
+              <span className="text-sm text-gray-500">Duration: </span>
+              <span className="font-semibold">{section.duration} min</span>
+            </p>
+          </div>
+          <div className="bg-white w-full">
+            <button onClick={handleFinishSection} className="bg-green-700 py-4 rounded w-full text-white font-semibold hover:bg-green-800">
+              Finish Section
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
