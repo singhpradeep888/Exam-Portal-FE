@@ -1,8 +1,7 @@
-// App.js
 import React from 'react';
-import Sidebar from '../Sidebar/sidebar';
+import Sidebar from '/src/components/Faculty/Sidebar/sidebar';
 
-function Dashboard() {
+export default function Dashboard() {
 
   return (
     <div style={{ display: 'flex' }}>
@@ -14,5 +13,3 @@ function Dashboard() {
     </div>
   );
 }
-
-export default Dashboard;

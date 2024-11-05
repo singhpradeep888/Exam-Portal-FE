@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Sidebar from '/src/components/Sidebar/sidebar';
+import Sidebar from '/src/components/Faculty/Sidebar/sidebar';
 import { Input } from '../../ui/Input';
 import Button from '../../ui/Button';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -22,11 +22,11 @@ const Examinees = () => {
         const data = await response.json();
 
         if (!response.ok) {
-          console.log(`Exam Error:: ${data.message}`);
+          alert(`Exam Error:: ${data.message}`);
           navigateTo('/exams');
         }
       } catch (err) {
-        console.log(`Exam Error:: ${err.message}`);
+        alert(`Exam Error:: ${err.message}`);
         navigateTo('/exams');
       }
     }
@@ -198,10 +198,10 @@ const Examinees = () => {
 
           {existingExaminees.length > 0 ? (
             <>
-              <h1 className="text-2xl text-gray-500 mt-4">
+              <h1 className="text-2xl text-gray-500 mt-4 mb-2">
                 Existing Examinees
               </h1>
-              <div className="relative overflow-x-auto border sm:rounded-lg">
+              <div className="relative overflow-x-auto border rounded-lg">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
